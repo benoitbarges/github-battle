@@ -34,17 +34,22 @@ class PlayerInput extends React.Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (event) => {
     this.setState({
-      username: e.currentTarget.value
+      username: event.currentTarget.value
     })
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    this.props.onSubmit(this.state.username)
   }
 
   render() {
     return (
-      <form className="column player">
+      <form className="column player" onSubmit={this.handleSubmit}>
         <label htmlFor="username" className='player-label'>
-
+          {this.props.label}
         </label>
         <div className='row player-inputs'>
           <input
@@ -58,7 +63,7 @@ class PlayerInput extends React.Component {
           />
           <button
             type='submit'
-            className='btn btn-dark'
+            className='btn dark-btn'
             disabled={!this.state.username}
           >
             Submit
@@ -70,11 +75,42 @@ class PlayerInput extends React.Component {
 }
 
 export default class Battle extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      playerOne: null,
+      playerTwo: null
+    }
+  }
+
+  handleSubmit = (id, username) => {
+    this.setState({
+      [id]: username
+    })
+  }
+
   render() {
     return (
       <React.Fragment>
         <Instructions />
-        <PlayerInput />
+        <div className='players-container'>
+          <h1 className='center-text header-lg'>Players</h1>
+          <div className='row space-around'>
+            {this.state.playerOne === null && (
+              <PlayerInput
+                label='Player One'
+                onSubmit={(username) => this.handleSubmit('playerOne', username)}
+              />
+            )}
+            {this.state.playerTwo === null && (
+              <PlayerInput
+                label='Player Two'
+                onSubmit={(username) => this.handleSubmit('playerTwo', username)}
+              />
+            )}
+          </div>
+        </div>
       </React.Fragment>
     )
   }
