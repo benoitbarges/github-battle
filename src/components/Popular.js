@@ -1,6 +1,7 @@
 import React from 'react'
 import Proptypes from 'prop-types'
 import { fetchLanguage } from '../utils/api'
+import { FaUser, FaStar, FaCodeBranch, FaExclamationTriangle } from 'react-icons/fa'
 
 function LanguagesNav ({ selected, onUpdateLanguage }) {
   const languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python']
@@ -44,8 +45,26 @@ function ReposGrid ({repos}) {
               alt={`Avatar for ${login}`}
             />
             <h2 className='center-text'>
-              <a href={html_url}>{name}</a>
+              <a className='link' href={html_url}>{name}</a>
             </h2>
+            <ul className='card-list'>
+              <li>
+                <FaUser color='#F7BE73' size={22}/>
+                <a href={`https://github.com/${login}`}>{login}</a>
+              </li>
+              <li>
+                <FaStar color='#FBD84A' />
+                {stargazers_count.toLocaleString()} stars
+              </li>
+              <li>
+                <FaCodeBranch color='#81C3F5' />
+                {forks.toLocaleString()} forks
+              </li>
+              <li>
+                <FaExclamationTriangle color='#F18A93' />
+                {open_issues.toLocaleString()} open issues
+              </li>
+            </ul>
           </li>
         )
       })}
