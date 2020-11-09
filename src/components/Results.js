@@ -1,20 +1,25 @@
 import React from 'react'
 import { battle } from '../utils/api'
 import { FaCompass, FaUsers, FaUserFriends, FaCode, FaUser } from 'react-icons/fa'
-import Card from './Card'
 import Proptypes from 'prop-types'
+import Card from './Card'
 import Loading from './Loading'
+import Tooltip from './Tooltip'
 
 function ProfileList({ profile }) {
   return (
     <ul className='card-list'>
       <li>
-        <FaUser color='#EF7373' size={22}/>
-        {profile.name}
+        <Tooltip text="User's name">
+          <FaUser color='#EF7373' size={22}/>
+          {profile.name}
+        </Tooltip>
       </li>
       <li>
-        <FaCompass color='#9173F7' size={22}/>
-        {profile.location}
+        <Tooltip text="User's location">
+          <FaCompass color='#9173F7' size={22}/>
+          {profile.location}
+        </Tooltip>
       </li>
       <li>
         <FaUsers color='rgb(129, 195, 245)' size={22}/>
