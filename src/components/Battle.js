@@ -1,5 +1,7 @@
 import React from 'react'
-import { FaUserFriends, FaFighterJet, FaTrophy } from 'react-icons/fa'
+import Proptypes from 'prop-types'
+import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
+import Results from './Results'
 
 function Instructions () {
   return (
@@ -74,13 +76,43 @@ class PlayerInput extends React.Component {
   }
 }
 
+function PlayerPreview({ username, label, onReset }) {
+  return (
+    <div className="column player">
+      <h3 className="player-label">{label}</h3>
+      <div className='row bg-light'>
+        <div className='player-info'>
+          <img
+            src={`https://github.com/${username}.png?size=200`}
+            alt={`Avatar of ${username}`}
+            className='avatar-small'
+          />
+          <a href={`https://github.com/${username}`} className='link'>
+            {username}
+          </a>
+        </div>
+        <button className='btn-clear flex-center' onClick={onReset}>
+          <FaTimesCircle color='#C2392A' size={26} />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+PlayerPreview.propTypes = {
+  username: Proptypes.string.isRequired,
+  label: Proptypes.string.isRequired,
+  onReset: Proptypes.func.isRequired
+}
+
 export default class Battle extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       playerOne: null,
-      playerTwo: null
+      playerTwo: null,
+      battle: false
     }
   }
 
@@ -90,26 +122,64 @@ export default class Battle extends React.Component {
     })
   }
 
+  handleReset = (id) => {
+     this.setState({
+      [id]: null
+    })
+  }
+
+  resetBattle = () => {
+     this.setState({
+      playerOne: null,
+      playerTwo: null,
+       battle: false
+    })
+  }
+
   render() {
+    if (this.state.battle) {
+      return <Results playerOne={this.state.playerOne} playerTwo={this.state.playerTwo} onResetBattle={this.resetBattle}/>
+    }
+
     return (
       <React.Fragment>
         <Instructions />
         <div className='players-container'>
           <h1 className='center-text header-lg'>Players</h1>
           <div className='row space-around'>
-            {this.state.playerOne === null && (
-              <PlayerInput
-                label='Player One'
-                onSubmit={(username) => this.handleSubmit('playerOne', username)}
-              />
-            )}
-            {this.state.playerTwo === null && (
-              <PlayerInput
-                label='Player Two'
-                onSubmit={(username) => this.handleSubmit('playerTwo', username)}
-              />
-            )}
+            {this.state.playerOne === null
+              ? <PlayerInput
+                  label='Player One'
+                  onSubmit={(username) => this.handleSubmit('playerOne', username)}
+                />
+              : <PlayerPreview
+                  username={this.state.playerOne}
+                  label='Player One'
+                  onReset={() => this.handleReset('playerOne')}
+                />
+            }
+
+            {this.state.playerTwo === null
+              ? <PlayerInput
+                  label='Player Two'
+                  onSubmit={(username) => this.handleSubmit('playerTwo', username)}
+                />
+              : <PlayerPreview
+                  username={this.state.playerTwo}
+                  label='Player Two'
+                  onReset={() => this.handleReset('playerTwo')}
+                />
+            }
+
           </div>
+          {this.state.playerOne && this.state.playerTwo && (
+            <button
+              className='btn dark-btn btn-space'
+              onClick= {() => this.setState({battle: true})}
+            >
+              Battle
+            </button>
+          )}
         </div>
       </React.Fragment>
     )
