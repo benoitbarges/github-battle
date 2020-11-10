@@ -2,28 +2,33 @@ import React from 'react'
 import Proptypes from 'prop-types'
 import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
 import Results from './Results'
+import { ThemeConsumer } from '../contexts/theme'
 
 function Instructions () {
   return (
-    <div className='instructions-container'>
-      <h1 className='center-text header-lg'>
-        Instructions
-      </h1>
-      <ol className='container-sm grid center-text battle-instructions'>
-        <li>
-          <h3 className='header-sm'>Enter two Github users</h3>
-          <FaUserFriends className='bg-light' size={140} color='#F7BE73' />
-        </li>
-        <li>
-          <h3 className='header-sm'>Battle</h3>
-          <FaFighterJet className='bg-light' size={140} color='#727272' />
-        </li>
-        <li>
-          <h3 className='header-sm'>See the winner</h3>
-          <FaTrophy className='bg-light' size={140} color='#FBD84A' />
-        </li>
-      </ol>
-    </div>
+    <ThemeConsumer>
+      {({ theme }) => (
+        <div className='instructions-container'>
+          <h1 className='center-text header-lg'>
+            Instructions
+          </h1>
+          <ol className='container-sm grid center-text battle-instructions'>
+            <li>
+              <h3 className='header-sm'>Enter two Github users</h3>
+              <FaUserFriends className={`bg-${theme}`} size={140} color='#F7BE73' />
+            </li>
+            <li>
+              <h3 className='header-sm'>Battle</h3>
+              <FaFighterJet className={`bg-${theme}`} size={140} color='#727272' />
+            </li>
+            <li>
+              <h3 className='header-sm'>See the winner</h3>
+              <FaTrophy className={`bg-${theme}`} size={140} color='#FBD84A' />
+            </li>
+          </ol>
+        </div>
+      )}
+    </ThemeConsumer>
   )
 }
 
@@ -49,53 +54,61 @@ class PlayerInput extends React.Component {
 
   render() {
     return (
-      <form className="column player" onSubmit={this.handleSubmit}>
-        <label htmlFor="username" className='player-label'>
-          {this.props.label}
-        </label>
-        <div className='row player-inputs'>
-          <input
-            type='text'
-            id='username'
-            className='input-light'
-            placeholder='Github username'
-            autoComplete='off'
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <button
-            type='submit'
-            className='btn dark-btn'
-            disabled={!this.state.username}
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+      <ThemeConsumer>
+        {({ theme }) =>(
+          <form className="column player" onSubmit={this.handleSubmit}>
+            <label htmlFor="username" className='player-label'>
+              {this.props.label}
+            </label>
+            <div className='row player-inputs'>
+              <input
+                type='text'
+                id='username'
+                className={`input-${theme}`}
+                placeholder='Github username'
+                autoComplete='off'
+                value={this.state.username}
+                onChange={this.handleChange}
+              />
+              <button
+                type='submit'
+                className={`btn ${theme === 'dark' ? 'light-btn' : 'dark-btn'}`}
+                disabled={!this.state.username}
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        )}
+      </ThemeConsumer>
     )
   }
 }
 
 function PlayerPreview({ username, label, onReset }) {
   return (
-    <div className="column player">
-      <h3 className="player-label">{label}</h3>
-      <div className='row bg-light'>
-        <div className='player-info'>
-          <img
-            src={`https://github.com/${username}.png?size=200`}
-            alt={`Avatar of ${username}`}
-            className='avatar-small'
-          />
-          <a href={`https://github.com/${username}`} className='link'>
-            {username}
-          </a>
+    <ThemeConsumer>
+      {({ theme }) => (
+      <div className="column player">
+        <h3 className="player-label">{label}</h3>
+        <div className={`row bg-${theme}`}>
+          <div className='player-info'>
+            <img
+              src={`https://github.com/${username}.png?size=200`}
+              alt={`Avatar of ${username}`}
+              className='avatar-small'
+            />
+            <a href={`https://github.com/${username}`} className='link'>
+              {username}
+            </a>
+          </div>
+          <button className='btn-clear flex-center' onClick={onReset}>
+            <FaTimesCircle color='#C2392A' size={26} />
+          </button>
         </div>
-        <button className='btn-clear flex-center' onClick={onReset}>
-          <FaTimesCircle color='#C2392A' size={26} />
-        </button>
       </div>
-    </div>
+      )}
+    </ThemeConsumer>
   )
 }
 

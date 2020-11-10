@@ -1,29 +1,34 @@
 import React from 'react'
 import Proptypes from 'prop-types'
+import { ThemeConsumer } from '../contexts/theme'
 
 export default function Card({ header, subheader, avatar, href, name, children}) {
   return (
-    <div className='card bg-light'>
-      <h4 className='header-lg center-text'>
-        {header}
-      </h4>
-      <img
-        src={avatar}
-        alt={`Avatar for ${name}`}
-        className='avatar'
-      />
-      {subheader && (
-        <h4 className='center-text'>
-          Score : {subheader}
-        </h4>
+    <ThemeConsumer>
+      {({ theme }) => (
+        <div className='card bg-light'>
+          <h4 className='header-lg center-text'>
+            {header}
+          </h4>
+          <img
+            src={avatar}
+            alt={`Avatar for ${name}`}
+            className='avatar'
+          />
+          {subheader && (
+            <h4 className='center-text'>
+              Score : {subheader}
+            </h4>
+          )}
+          <h2 className='center-text'>
+            <a href={href} className='link'>
+              {name}
+            </a>
+          </h2>
+          {children}
+        </div>
       )}
-      <h2 className='center-text'>
-        <a href={href} className='link'>
-          {name}
-        </a>
-      </h2>
-      {children}
-    </div>
+    </ThemeConsumer>
   )
 }
 
