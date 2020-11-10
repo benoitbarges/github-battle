@@ -5,7 +5,7 @@ import Battle from './components/Battle'
 import Nav from './components/Nav'
 import Results from './components/Results'
 import { ThemeProvider } from './contexts/theme'
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -27,9 +27,12 @@ export default class App extends React.Component {
           <div className={this.state.theme}>
             <div className="container">
               <Nav />
-              <Route exact path='/' component={Popular}/>
-              <Route exact path='/battle' component={Battle}/>
-              <Route path='/battle/results' component={Results}/>
+              <Switch>
+                <Route exact path='/' component={Popular}/>
+                <Route exact path='/battle' component={Battle}/>
+                <Route path='/battle/results' component={Results}/>
+                <Route render={() => <h1>404</h1>}/>
+              </Switch>
             </div>
           </div>
         </ThemeProvider>
