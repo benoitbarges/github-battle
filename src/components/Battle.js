@@ -1,8 +1,8 @@
 import React from 'react'
 import Proptypes from 'prop-types'
 import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
-import Results from './Results'
 import { ThemeConsumer } from '../contexts/theme'
+import { Link } from 'react-router-dom'
 
 function Instructions () {
   return (
@@ -144,15 +144,11 @@ export default class Battle extends React.Component {
   resetBattle = () => {
      this.setState({
       playerOne: null,
-      playerTwo: null,
-       battle: false
+      playerTwo: null
     })
   }
 
   render() {
-    if (this.state.battle) {
-      return <Results playerOne={this.state.playerOne} playerTwo={this.state.playerTwo} onResetBattle={this.resetBattle}/>
-    }
 
     return (
       <React.Fragment>
@@ -186,12 +182,15 @@ export default class Battle extends React.Component {
 
           </div>
           {this.state.playerOne && this.state.playerTwo && (
-            <button
+            <Link
               className='btn dark-btn btn-space'
-              onClick= {() => this.setState({battle: true})}
+              to={{
+                pathname: '/battle/results',
+                search: `?playerOne=${this.state.playerOne}&playerTwo=${this.state.playerTwo}`
+              }}
             >
               Battle
-            </button>
+            </Link>
           )}
         </div>
       </React.Fragment>
